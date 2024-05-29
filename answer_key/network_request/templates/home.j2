@@ -1,0 +1,68 @@
+{% extends "base.j2" %}
+{% block content %}
+    <div class="container">
+        <h1>Network Service Request</h1>
+        <p>
+            Submit a new network service request for consideration.
+        </p>
+        <form method="post">
+            <input type="hidden"
+                   id="submitter"
+                   name="submitter"
+                   value="{{ g.username }}"/>
+            <div class="form-group">
+                <label for="name" class="mr-sm-2">Network Name:</label>
+                <input type="text"
+                       class="form-control mb-2 mr-sm-2"
+                       placeholder="Enter the requested name for your new network service."
+                       id="name"
+                       name="name"/>
+            </div>
+            <div class="form-group">
+                <label for="description" class="mr-sm-2">Description:</label>
+                <textarea class="form-control mb-2 mr-sm-2"
+                          rows="3"
+                          id="description"
+                          name="description"
+                          placeholder="Provide a description for this new services."></textarea>
+            </div>
+            {% if g.username %}
+                <input type="submit" value="Submit" />
+            {% else %}
+                <p class="btn-info">
+                You must <a href="{{ url_for('auth.login') }}" class="text-white">login</a> to submit a new service request.
+            </p>
+        {% endif %}
+    </form>
+</div>
+{% if g.authenticated %}
+    <div class="container">
+        <h1>Network Service Request Status</h1>
+        <p>
+            Here you can view network service requests you have made.
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>VLAN Name</th>
+                    <th>VLAN Id</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for uuid, service in service_list.items() %}
+                    {% if service.submitter == g.username %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.id }}</td>
+                            <td>{{ service.description }}</td>
+                            <td>{{ service.status }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% endblock content %}

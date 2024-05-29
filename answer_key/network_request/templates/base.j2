@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Demo: TACACS Auth</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet"
+              href="/static/bootstrap.min.css"/>
+        <script src="/static/jquery.slim.min.js"></script>
+        <script src="/static/popper.min.js"></script>
+        <script src="/static/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home.home') }}">Submit Request</a>
+                    </li>
+                    {% if g.rights.read %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('services.services') }}">Manage Services</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="mx-auto order-0">
+                <a class="navbar-brand mx-auto" href="/">Network Request Application</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target=".dual-collapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <!-- Navbar text-->
+                <ul class="navbar-nav ml-auto">
+                    {% if g.username %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/profile">Hello {{ g.username }}</a>
+                        </li>
+                    {% endif %}
+                    {% if not g.authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Log In</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <section class="content">
+            <header>
+                {% block header %}
+                {% endblock header %}
+            </header>
+            {% block content %}
+            {% endblock content %}
+        </section>
+    </body>
+</html>

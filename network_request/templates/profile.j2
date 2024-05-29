@@ -1,0 +1,33 @@
+{% extends "base.j2" %}
+
+{% block content %}
+<div class="container">
+  <h1>Profile Page User: {{username}}</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Application Right</th>
+        <th>Enabled</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr {% if not rights.read %}class="table-danger"{% endif %}>
+        <td>read</td>
+        <td>{{ rights.read }}</td>
+        <td>Ability to view submitted network requests</td>
+      </tr>
+      <tr {% if not rights.submit %}class="table-danger"{% endif %}>
+        <td>submit</td>
+        <td>{{ rights.submit }}</td>
+        <td>Ability to submit a new network request</td>
+      </tr>
+      
+      <tr {% if not rights.manage %}class="table-danger"{% endif %}>
+        <td>manage</td>
+        <td>{{ rights.manage }}</td>
+        <td>Ability to approve / deny a network request</td>
+      </tr>
+    </tbody>  </table>
+</div>
+{% endblock %}

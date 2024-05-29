@@ -1,0 +1,63 @@
+{% extends "base.j2" %}
+{% block content %}
+    <div class="container">
+        <h1>Network Service Management</h1>
+        <p>
+            Here you can view and manage all network service requests that have been made.
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>VLAN Name</th>
+                    <th>VLAN Id</th>
+                    <th>Description</th>
+                    <th>Submitter</th>
+                    <th>Status</th>
+                    {% if g.rights.manage %}<th>Action</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for uuid, service in service_list.items() %}
+                    <form method="post">
+                        <input type="hidden" id="uuid" name="uuid" value="{{ uuid }}"/>
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            {# logic for whether to support changing the VLAN id #}
+                            {% if service.status != "approved" and g.rights.manage %}
+                                <td>
+                                    <input type="text"
+                                           size="5"
+                                           class="form-control mb-2 mr-sm-2"
+                                           placeholder="VLAN ID"
+                                           value="{{ service.id }}"
+                                           id="vid"
+                                           name="vid"/>
+                                </td>
+                            {% else %}
+                                <input type="hidden" id="vid" name="vid" value="{{ service.id }}"/>
+                                <td>{{ service.id }}</td>
+                            {% endif %}
+                            <td>{{ service.description }}</td>
+                            <td>{{ service.submitter }}</td>
+                            <td>{{ service.status }}</td>
+                            {% if g.rights.manage %}
+                                <td>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            id="action"
+                                            name="action"
+                                            value="approved">Approve</button>
+                                    <button type="submit"
+                                            class="btn btn-danger"
+                                            id="action"
+                                            name="action"
+                                            value="denied">Deny</button>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    </form>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
