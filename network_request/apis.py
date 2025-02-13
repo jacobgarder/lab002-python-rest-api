@@ -73,8 +73,8 @@ class ServicesList(Resource):
 
     # DONE: Update the create_new method to provide CREATE access to services
     # DONE: Leverage the available decorators from api_auth to require "submit" rights to this API
-    # TODO: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
-    # TODO: Ensure appropriate HTTP status code provided to users when this API is successful
+    # DONE: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
+    # DONE: Ensure appropriate HTTP status code provided to users when this API is successful
     @submit_required
     @verify_payload_fields
     def post(self):
@@ -105,9 +105,9 @@ class Service(Resource):
         try:
             service = service_list[uuid]
             return asdict(service)
-        # TODO: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
+        # DONE: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
         except KeyError:
-            return Response()
+            return Response(status=404)
 
     # TODO: Update the replace method to provide UPDATE access to services
     # TODO: Leverage the available decorators from api_auth to require "manage" rights to this API
