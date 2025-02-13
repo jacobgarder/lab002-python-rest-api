@@ -35,6 +35,7 @@ def create_app(configfile=None):
     app.register_blueprint(home.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(services.bp)
+    app.register_blueprint(apis.bp, url_prefix="/api/v1")
     # TODO: Register the blueprint from the apis.py module to leverage a URL prefix of "/api/v1"
 
     # Create a secret key for session encoding
