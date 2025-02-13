@@ -58,12 +58,14 @@ def verify_payload_fields(view):
 
 
 # TODO: Serve the API route "/services" with the ServicesList class
+@api.route("/services")
 class ServicesList(Resource):
     """API Class for interacting with the list of Services."""
 
     # TODO: Update the lookup method to provide READ access to services
     # TODO: Leverage the available decorators from api_auth to require "read" rights to this API
-    def lookup(self):
+    @read_required
+    def get(self):
         """Allow READ access to retrieve all defined Services via API."""
         # Use the asdict funciton from data classes to make each VLAN_Service
         # JSON serializable
@@ -73,7 +75,7 @@ class ServicesList(Resource):
     # TODO: Leverage the available decorators from api_auth to require "submit" rights to this API
     # TODO: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
     # TODO: Ensure appropriate HTTP status code provided to users when this API is successful
-    def create_new(self):
+    def post(self):
         """Allow CREATE operation to add a new Service via API."""
         new_uuid = uuid4().int
         service_list[new_uuid] = VLAN_Service(
