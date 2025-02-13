@@ -152,15 +152,16 @@ class Service(Resource):
 
         return Response(status=204)
 
-    # TODO: Update the remove method to provide DELETE access to services
-    # TODO: Leverage the available decorators from api_auth to require "manage" rights to this API
-    # TODO: Ensure appropriate HTTP status code provided to users when this API is successful
-    def remove(self, uuid):
+    # DONE: Update the remove method to provide DELETE access to services
+    # DONE: Leverage the available decorators from api_auth to require "manage" rights to this API
+    # DONE: Ensure appropriate HTTP status code provided to users when this API is successful
+    @manage_required
+    def delete(self, uuid):
         """Allow DELETE action on an existing Service by deleting the provided Service by UUID."""
         try:
             service_list.pop(uuid)
-        # TODO: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
+        # DONE: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
         except KeyError:
-            return Response()
+            return Response(status=404)
 
-        return Response()
+        return Response(status=204)
