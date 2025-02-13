@@ -57,13 +57,13 @@ def verify_payload_fields(view):
     return wrapped_view
 
 
-# TODO: Serve the API route "/services" with the ServicesList class
+# DONE: Serve the API route "/services" with the ServicesList class
 @api.route("/services")
 class ServicesList(Resource):
     """API Class for interacting with the list of Services."""
 
-    # TODO: Update the lookup method to provide READ access to services
-    # TODO: Leverage the available decorators from api_auth to require "read" rights to this API
+    # DONE: Update the lookup method to provide READ access to services
+    # DONE: Leverage the available decorators from api_auth to require "read" rights to this API
     @read_required
     def get(self):
         """Allow READ access to retrieve all defined Services via API."""
@@ -71,10 +71,12 @@ class ServicesList(Resource):
         # JSON serializable
         return {uuid: asdict(service) for uuid, service in service_list.items()}
 
-    # TODO: Update the create_new method to provide CREATE access to services
-    # TODO: Leverage the available decorators from api_auth to require "submit" rights to this API
+    # DONE: Update the create_new method to provide CREATE access to services
+    # DONE: Leverage the available decorators from api_auth to require "submit" rights to this API
     # TODO: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
     # TODO: Ensure appropriate HTTP status code provided to users when this API is successful
+    @submit_required
+    @verify_payload_fields
     def post(self):
         """Allow CREATE operation to add a new Service via API."""
         new_uuid = uuid4().int
@@ -83,17 +85,20 @@ class ServicesList(Resource):
             description=api.payload["description"],
             submitter=request.authorization.username,
         )
-        return {"uuid": str(new_uuid)}
+        return {"uuid": str(new_uuid)}, 201
 
 
-# TODO: Provide access to individual Services at the "/services" route when identified by a "uuid" parameter
+# DONE: Provide access to individual Services at the "/services" route when identified by a "uuid" parameter
 #       - UUIDs are Python Integers
+@api.route("/services/<int:uuid>")
+@api.param("uuid", "The Service UUID")
 class Service(Resource):
     """API Class for interacting with a single Service by UUID."""
 
-    # TODO: Update the lookup method to provide READ access to services
-    # TODO: Leverage the available decorators from api_auth to require "read" rights to this API
-    def lookup(self, uuid):
+    # DONE: Update the lookup method to provide READ access to services
+    # DONE: Leverage the available decorators from api_auth to require "read" rights to this API
+    @read_required
+    def get(self, uuid):
         """Allow READ access to access details for a specific Service by UUID."""
         # Use the asdict funciton from data classes to make each VLAN_Service
         # JSON serializable
