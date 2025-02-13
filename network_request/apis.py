@@ -109,17 +109,19 @@ class Service(Resource):
         except KeyError:
             return Response(status=404)
 
-    # TODO: Update the replace method to provide UPDATE access to services
-    # TODO: Leverage the available decorators from api_auth to require "manage" rights to this API
-    # TODO: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
-    # TODO: Ensure appropriate HTTP status code provided to users when this API is successful
-    def replace(self, uuid):
+    # DONE: Update the replace method to provide UPDATE access to services
+    # DONE: Leverage the available decorators from api_auth to require "manage" rights to this API
+    # DONE: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
+    # DONE: Ensure appropriate HTTP status code provided to users when this API is successful
+    @manage_required
+    @verify_payload_fields
+    def put(self, uuid):
         """Allow UPDATE action on an existing Service by replacing Service details."""
         try:
             service = service_list[uuid]
         # TODO: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
         except KeyError:
-            return Response()
+            return Response(status=404)
 
         # Replace data for the service
         service.status = api.payload["status"]
@@ -128,25 +130,27 @@ class Service(Resource):
         service.id = api.payload["id"]
         service.submitter = api.payload["submitter"]
 
-        return Response()
+        return Response(status=204)
 
-    # TODO: Update the modify method to provide partial UPDATE access to services
-    # TODO: Leverage the available decorators from api_auth to require "manage" rights to this API
-    # TODO: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
-    # TODO: Ensure appropriate HTTP status code provided to users when this API is successful
-    def modify(self, uuid):
+    # DONE: Update the modify method to provide partial UPDATE access to services
+    # DONE: Leverage the available decorators from api_auth to require "manage" rights to this API
+    # DONE: Leverage the available function verify_payload_fields to ensure data submitted with the API is valid
+    # DONE: Ensure appropriate HTTP status code provided to users when this API is successful
+    @manage_required
+    @verify_payload_fields
+    def patch(self, uuid):
         """Allow UPDATE action on an existing Service by updating provided Service details."""
         try:
             service = service_list[uuid]
-        # TODO: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
+        # DONE: Ensure appropriate HTTP status code provided to users if the provided UUID isn't found
         except KeyError:
-            return Response()
+            return Response(status=404)
 
         # Loop over the payload provided and update whichever fields are provided
         for key, value in api.payload.items():
             setattr(service, key, value)
 
-        return Response()
+        return Response(status=204)
 
     # TODO: Update the remove method to provide DELETE access to services
     # TODO: Leverage the available decorators from api_auth to require "manage" rights to this API
